@@ -29,8 +29,14 @@ if __name__ == "__main__":
     xaxis = scaled_diff_data[0]
     yaxis = scaled_diff_data[1]
     zaxis = scaled_diff_data[2]
-
-    numsplits = 23 #number of arrays each axis is split into. Roughly equal to hours in the can.
+    
+    numsplits = 24 #number of arrays each axis is split into. Roughly equal to hours in the can.
     axis_array_size = len(scaled_diff_data[0])
+    
+    xresult = axis_noise_analysis(numsplits, xaxis)
+    yresult = axis_noise_analysis(numsplits, yaxis)
+    zresult = axis_noise_analysis(numsplits, zaxis)
+
+    print(f"Average Max Noise in X, Y, Z: {xresult:.3f}nT, {yresult:.3f}nT, {zresult:.3f}nT")
 
     #last_index = axis_array_size - (numsplits - 1) * mean_index #last remainder index length. Not actually necessary.
