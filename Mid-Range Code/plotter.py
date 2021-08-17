@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Aug 11 13:28:16 2021
-
 @author: Matt Lacaire
-
 Script that is intended to display commercial magnetometer axis readings in real-time.
-
 """
-from WitMotionCode.py import Hx, Hy, Hz
+from WitMotionCode_Modified import getMagField
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
-
 
 def shift_1D_array(array, new_val):
     new_array = np.zeros_like(array)
@@ -34,10 +30,14 @@ def my_animation(
     ax.set_ylim([min, max])
     ax.set_xlim([0, data_set_length-1]) #fix later. 
     
+
     def update_plot(index):
         nonlocal data_set #referencing objects immediately outside of function scope
-        nonlocal line 
-        new_val = Hx
+        nonlocal line
+
+        new_val = getMagField()
+
+        #single, one-time number must be passed into this. 
         data_set = shift_1D_array(data_set, new_val)
         line.set_ydata(data_set)
         
