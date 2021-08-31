@@ -10,8 +10,9 @@ noise analysis.
 """
 
 import numpy as np
-import ldat_processor 
+from ldat_processor import load_ldat_datetime_search
 import math
+import datetime
 
 #%%
 def axis_noise_analysis(numsplits, axisarray): #input the number of times the array is split (how often means are taken) and the array of changing mag. field..)
@@ -23,20 +24,24 @@ def axis_noise_analysis(numsplits, axisarray): #input the number of times the ar
     output_array[numsplits-1] = np.max(axisarray[(numsplits - 1)*mean_index:])
     true_mean_noise = np.mean(output_array)
     return true_mean_noise
-#%%
-if __name__ == "__main__":
-
-    xaxis = scaled_diff_data[0]
-    yaxis = scaled_diff_data[1]
-    zaxis = scaled_diff_data[2]
+#%%if __name__ == "__main__":
     
-    numsplits = 24 #number of arrays each axis is split into. Roughly equal to hours in the can.
-    axis_array_size = len(scaled_diff_data[0])
-    
-    xresult = axis_noise_analysis(numsplits, xaxis)
-    yresult = axis_noise_analysis(numsplits, yaxis)
-    zresult = axis_noise_analysis(numsplits, zaxis)
+    start_datetime = datetime.datetime(2021,8,28,00,tzinfo=UTC)
+    end_datetime = datetime.datetime(2021,8,28,23,tzinfo=UTC)
+    ldat_data_array = load_ldat_datetime_search(
+    start_datetime=start_datetime, 
+    end_datetime=end_datetime,
+    start_dir = "./noise_test_fglog_ldats")    
+    ldat_data_array = ldat_data_array.T #transpose array
+    ldat_data = ldat_data_array[1:] #removing timestamps
+    numsplits = 24
+    result = np.zeros(3)
+    for x in range(3):
+        difference_data = np.asarray(ldat_data[x] - np.mean(ldat_data[x]))
+        print(difference_data)
+        result[x] = axis_noise_analysis(numsplits, difference_data)
 
-    print(f"Average Max Noise in X, Y, Z: {xresult:.3f}nT, {yresult:.3f}nT, {zresult:.3f}nT")
+
+    print(f"Average Max Noise in X, Y, Z: {result[0]:.3f}nT, {result[1]:.3f}nT, {result[2]:.3f}nT")
 
     #last_index = axis_array_size - (numsplits - 1) * mean_index #last remainder index length. Not actually necessary.
