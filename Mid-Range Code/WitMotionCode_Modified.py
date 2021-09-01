@@ -9,7 +9,7 @@ numChars = 11 #Length in bytes of each message.
 def getMagField():
     try:
         port = serial.Serial(address, BAUDRATE, bytesize = 8) 
-        print(f"Successfully opened port at {address}")
+        #print(f"Successfully opened port at {address}")
     except serial.SerialException:
         Hx = 0
         Hy = 0
@@ -17,8 +17,8 @@ def getMagField():
         print("Error in port connection")
         return False
     else:
-        x = port.read(numChars)
-        
+#        x = port.read(numChars)
+#        
 #         while x[0] != 85: #previous logic used; inefficient. 
 #             port.close()
 #             port = serial.Serial(address, BAUDRATE, bytesize = 8)
@@ -55,7 +55,6 @@ def getMagField():
                 else:
                     read_continue = False
         x = byte_string
-        print(x)
         Hx = ((x[3] << 8) | x[4]) 
         Hy = ((x[5] << 8) | x[6]) 
         Hz = ((x[7] << 8) | x[8])
@@ -76,4 +75,4 @@ def getMagField():
              time = datetime.datetime.now()
              print(time)
         port.close()
-    return Hx
+    return Hx, Hy, Hz

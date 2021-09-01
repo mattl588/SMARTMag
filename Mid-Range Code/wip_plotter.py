@@ -16,10 +16,10 @@ def shift_1D_array(array, new_val):
     return new_array
 
 def my_animation(
-        min = -20000,
-        max = 20000,
+        min = -10000,
+        max = 10000,
         data_set_length = 150,
-        delay = 50): #in ms
+        delay = 100): #in ms
     
     data_set = (np.zeros(data_set_length)) #plotter starts with zeroes 
     x_range = np.arange(150)
@@ -34,11 +34,11 @@ def my_animation(
     def update_plot(index):
         nonlocal data_set #referencing objects immediately outside of function scope
         nonlocal line
-
         new_val = getMagField()
 
+
         #single, one-time number must be passed into this. 
-        data_set = shift_1D_array(data_set, new_val)
+        data_set = shift_1D_array(data_set, new_val[0])
         line.set_ydata(data_set)
         
         fig.canvas.draw_idle()
